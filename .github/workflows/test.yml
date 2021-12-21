@@ -5,9 +5,11 @@ on:
         branches: [master]
     pull_request:
         branches: [master]
+        types: [opened, closed]
 
 env: 
     NODE_VERSION: 14.x
+    PR_MERGE_VALIDATION: github.event.pull_request.merged
 
 jobs:
     test:
@@ -35,7 +37,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: ${{ env.PR_MERGE_VALIDATION }}
         name: Build
         runs-on: self-hosted
         needs: [test]
