@@ -9,16 +9,7 @@ env:
     NODE_VERSION: 14.x
 
 jobs:
-    prepare: 
-        name: Prepare static files
-        runs-on: self-hosted
-        steps:
-            - run: |
-                echo "preparing static files"
-                cp -r build/* static
-
     test:
-        needs: prepare
         name:  Test
         runs-on: self-hosted
         steps:
@@ -50,7 +41,7 @@ jobs:
               run: npm run lint
 
     build:
-        needs: [ prepare, test ]
+        needs: test
         if: github.event.action == 'closed' && github.event.pull_request.merged
         name: Build
         runs-on: self-hosted
@@ -68,3 +59,15 @@ jobs:
 
             - name: build
               run: npm run build
+
+    prepare:
+        needs: build
+        runs-on: self-hosted
+        steps:
+            - name: checkout master
+              uses: actions/checkout@v2
+              run: |
+                echo "preparing static files"
+                cp -r build/* static
+                
+                
