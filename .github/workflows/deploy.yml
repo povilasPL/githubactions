@@ -1,4 +1,4 @@
-name: Continuous Deployment
+name: CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  deployment:
+  build:
     runs-on: self-hosted
     steps:
       - name: Checkout main branch
@@ -19,13 +19,13 @@ jobs:
           node-version: '14.x'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm i
+
+      - name: Build application
+        run: npm run build
 
       - name: Test application
         run: npm run test:coverage
 
       - name: Run lint
         run: npm run lint
-
-      - name: Build application
-        run: npm run build
