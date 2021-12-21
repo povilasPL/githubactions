@@ -9,7 +9,7 @@
     "setupFilesAfterEnv": [
       "@testing-library/jest-dom/extend-expect"
     ],
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}"
     ],
@@ -26,8 +26,8 @@
   "scripts": {
     "start": "webpack serve --config webpack.config.dev.ts",
     "build": "webpack --config webpack.config.prod.ts",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test": "jest --",
+    "test:coverage": "jest --collectCoverage --",
     "lint": "eslint src/**/*.tsx"
   },
   "dependencies": {
