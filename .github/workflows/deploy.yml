@@ -4,8 +4,7 @@ on:
     push:
         branches: [master]
     pull_request:
-    release:
-        types: [published]
+        branches: [master]
 
 env: 
     NODE_VERSION: 14.x
@@ -13,30 +12,38 @@ env:
 jobs:
     test:
         name: Test
-        runs-on: [self-hosted, linux]
+        runs-on: self-hosted
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-            with:
+            - name: checkout master
+              uses: actions/checkout@v2
+
+            - name: setup node.js
+              uses: actions/setup-node@v1
+              with:
                 node-version: ${{ env.NODE_VERSION }}
+
             - name: install
-            run: npm i
+              run: npm i
 
             - name: test-unit
-            run: npm run test
+              run: npm run test
 
             - name: lint
-            run: npm run lint
+              run: npm run lint
 
     build:
         name: Build
-        runs-on: [self-hosted, linux]
+        runs-on: self-hosted
         needs: [test]
         steps: 
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-                with:
+            - name: checkout master
+              uses: actions/checkout@v2
+
+            - name: setup node.js
+              uses: actions/setup-node@v1
+              with:
                 node-version: ${{ env.NODE_VERSION }}
+
             - name: install
                 run: npm i
 
