@@ -2,7 +2,8 @@ name: CI CD
 
 on:
     pull_request:
-        branches: [master]
+        branches: [ master ]
+        types: [ created, reopened, synchronize, ready_for_review, closed ]
 
 env: 
     NODE_VERSION: 14.x
@@ -40,7 +41,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event.action == 'closed' && github.event.pull_request.merged
         name: Build
         runs-on: self-hosted
         steps: 
