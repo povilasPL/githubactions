@@ -4,6 +4,7 @@ on:
     push:
         branches: [master]
     pull_request:
+        type: [merged, closed]
         branches: [master]
 
 env: 
