@@ -2,7 +2,8 @@ name: CI CD
 
 on:
     pull_request:
-        branches: [master]
+        branches: [ master ]
+        types: [ created, reopened, synchronize, ready_for_review, closed ]
 
 env: 
     NODE_VERSION: 14.x
@@ -20,7 +21,14 @@ jobs:
               with:
                 node-version: ${{ env.NODE_VERSION }}
 
+            - name: cache dependencies
+              uses: actions/cache@v2
+              with:
+                path: ./node_modules
+                key: modules-${{ hashFiles('package-lock.json') }}
+
             - name: install
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npm i
 
             - name: test unit
@@ -33,7 +41,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event.action == 'closed' && github.event.pull_request.merged
         name: Build
         runs-on: self-hosted
         steps: 
