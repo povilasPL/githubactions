@@ -9,7 +9,6 @@ on:
 
 env: 
     NODE_VERSION: 14.x
-    PR_MERGE_VALIDATION: github.event.pull_request.merged
 
 jobs:
     test:
@@ -37,7 +36,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: ${{ env.PR_MERGE_VALIDATION }}
+        if: github.event.pull_request.merged
         name: Build
         runs-on: self-hosted
         needs: [test]
