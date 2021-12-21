@@ -59,3 +59,14 @@ jobs:
 
             - name: build
               run: npm run build
+
+    prepare:
+        needs: build
+        runs-on: self-hosted
+        steps:
+            - name: prepare static files
+              run: |
+                echo "preparing static files"
+                cp -r build/* static
+                
+                
