@@ -1,31 +1,44 @@
-name: CI
+name: CI / CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+  release:
+    types: [published]
+
+env: 
+  NODE_VERSION: 14.x
 
 jobs:
-  build:
-    runs-on: self-hosted
+  test:
+    name: Test
+    runs-on: [self-hosted, linux]
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-
-      - name: Install dependencies
+          node-version: ${{ env.NODE_VERSION }}
+      - name: install
         run: npm i
 
-      - name: Build application
+      - name: test-unit
+        run: npm run test
+
+     - name: lint
+       run: npm run lint
+
+  build:
+    name: Build
+    runs-on: [self-hosted, linux]
+    needs: [test]
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: install
+        run: npm i
+
+      - name: build
         run: npm run build
-
-      - name: Test application
-        run: npm run test:coverage
-
-      - name: Run lint
-        run: npm run lint
