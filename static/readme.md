@@ -1,1 +1,0 @@
-static files for nginx
