@@ -64,8 +64,7 @@ jobs:
         needs: build
         runs-on: self-hosted
         steps:
-            - name: checkout master
-              uses: actions/checkout@v2
+            - name: prepare static files
               run: |
                 echo "preparing static files"
                 cp -r build/* static
