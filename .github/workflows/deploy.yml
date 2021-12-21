@@ -1,14 +1,39 @@
-name: CD
+name: CI CD
 
 on:
     pull_request:
-        types: [ closed ]
+        branches: [master]
 
 env: 
     NODE_VERSION: 14.x
 
 jobs:
+    test:
+        name:  Test
+        runs-on: self-hosted
+        steps:
+            - name: checkout master
+              uses: actions/checkout@v2
+
+            - name: setup node.js and npm
+              uses: actions/setup-node@v2
+              with:
+                node-version: ${{ env.NODE_VERSION }}
+
+            - name: install
+              run: npm i
+
+            - name: test unit
+              run: npm run test
+
+            - name: check coverage
+              run: npm run test:coverage
+
+            - name: lint
+              run: npm run lint
+
     build:
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         name: Build
         runs-on: self-hosted
         steps: 
