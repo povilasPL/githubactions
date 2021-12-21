@@ -5,7 +5,6 @@ on:
         branches: [master]
     pull_request:
         branches: [master]
-        types: [opened, closed]
 
 env: 
     NODE_VERSION: 14.x
