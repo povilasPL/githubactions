@@ -35,7 +35,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: github.event.pull_request.merged
+        if: ${{ github.event.pull_request.merged }}
         name: Build
         runs-on: self-hosted
         needs: [test]
