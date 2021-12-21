@@ -1,21 +1,19 @@
-name: CD
+name: CI
 
 on:
     push:
         branches: [master]
     pull_request:
-        types: [ closed ]
+        branches: [master]
 
 env: 
     NODE_VERSION: 14.x
 
 jobs:
-    build:
-        if: github.event.pull_request.merged
-        name: Build
+    test:
+        name: Test
         runs-on: self-hosted
-        needs: [test]
-        steps: 
+        steps:
             - name: checkout master
               uses: actions/checkout@v2
 
@@ -27,5 +25,11 @@ jobs:
             - name: install
               run: npm i
 
-            - name: build
-              run: npm run build
+            - name: test unit
+              run: npm run test
+
+            - name: check coverage
+              run: npm run test:coverage
+
+            - name: lint
+              run: npm run lint
