@@ -25,7 +25,7 @@ jobs:
             - name: install
               run: npm i
 
-            - name: test-unit
+            - name: test unit
               run: npm run test
 
             - name: check coverage

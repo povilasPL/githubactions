@@ -19,6 +19,12 @@
             "functions": 90,
             "lines": 90,
             "statements": -10
+        },
+        "./src/index.tsx": {
+            "branches": 90,
+            "functions": 90,
+            "lines": 0,
+            "statements": 0
         }
     },
     "transform": {
