@@ -11,6 +11,7 @@ env:
 
 jobs:
     test:
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         name: Test
         runs-on: self-hosted
         steps:
@@ -35,7 +36,7 @@ jobs:
               run: npm run lint
 
     build:
-        if: github.event.pull_request.closed == 'true'
+
         name: Build
         runs-on: self-hosted
         needs: [test]
