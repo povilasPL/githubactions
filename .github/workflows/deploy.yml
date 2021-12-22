@@ -81,12 +81,3 @@ jobs:
                   path: ${{ env.NPM_BUILD_ARTIFACT }}
                   if-no-files-found: error
                   retention-days: 1
-
-    publish:
-        name: Publish
-        runs-on: [ self-hosted, linux ]
-        needs: [ test, build ]
-        steps:
-            - name: publish artifact
-              run: |
-                  echo "publishing artifact"
