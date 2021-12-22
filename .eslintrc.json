@@ -1,40 +1,25 @@
 {
+    "root": true,
     "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
     "plugins": [
         "@typescript-eslint",
+        "no-loops",
         "react-hooks"
     ],
     "extends": [
+        "plugin:react/jsx-runtime",
         "plugin:react/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-        "no-console": "error",
-        "comma-dangle": [
-            "error",
-            {
-                "arrays": "always-multiline",
-                "objects": "always-multiline",
-                "imports": "always-multiline",
-                "exports": "always-multiline",
-                "functions": "ignore"
-            }
-        ],
-        "import/extensions": "off",
-        "object-shorthand": "error",
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
-        "react/prop-types": "off",
-        "no-unused-vars": "warn",
-        "@typescript-eslint/no-unused-vars": "warn"
+        "no-console": 2,
+        "no-loops/no-loops": 2,
+        "react-hooks/exhaustive-deps": 1
     },
     "settings": {
         "react": {
-            "pragma": "React",
             "version": "detect"
         }
     }
