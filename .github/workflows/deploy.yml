@@ -2,8 +2,8 @@ name: CI CD
 
 on:
     pull_request:
-        branches: [master]
-        types: [created, reopened, synchronize, ready_for_review, closed]
+        branches: [ master ]
+        types: [ created, reopened, synchronize, ready_for_review, closed ]
 
 env:
     NODE_VERSION: 14.x
