@@ -3,11 +3,11 @@ name: CI CD
 on:
     pull_request:
         branches: [ master ]
-        types: [ created, reopened, synchronize, ready_for_review, closed ]
+        types: [ closed ]
 
 env:
     NODE_VERSION: 14.x
-    NPM_BUILD_ARTIFACT: './build'
+    NPM_BUILD_ARTIFACT: "./build"
 
 jobs:
     test:
@@ -16,14 +16,16 @@ jobs:
         steps:
             - name: checkout master
               uses: actions/checkout@v2
+              with:
+                  clean: false
 
             - name: cache node modules
               uses: actions/cache@v1
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                    ${{ runner.os }}-node-
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: setup node.js and npm
               uses: actions/setup-node@v2
@@ -50,14 +52,16 @@ jobs:
         steps:
             - name: checkout master
               uses: actions/checkout@v2
+              with:
+                  clean: false
 
             - name: cache node modules
               uses: actions/cache@v1
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                    ${{ runner.os }}-node-
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: setup node.js and npm
               uses: actions/setup-node@v2
@@ -72,11 +76,11 @@ jobs:
 
             - name: upload artifact
               uses: actions/upload-artifact@v2
-              with: 
-                name: ${{ github.event.repository.name }}
-                path: ${{ env.NPM_BUILD_ARTIFACT }}
-                if-no-files-found: error
-                retention-days: 1
+              with:
+                  name: ${{ github.event.repository.name }}
+                  path: ${{ env.NPM_BUILD_ARTIFACT }}
+                  if-no-files-found: error
+                  retention-days: 1
 
     publish:
         name: Publish
@@ -85,5 +89,4 @@ jobs:
         steps:
             - name: publish artifact
               run: |
-                echo "publishing artifact"
-
+                  echo "publishing artifact"
