@@ -2,8 +2,6 @@ import React from "react";
 
 const test = 'labas';
 
-console.log('test')
-
 const App: React.FC = () => (
     <h1 data-testid="app">Hello World!!!</h1>
 );
