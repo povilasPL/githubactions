@@ -1,9 +1,11 @@
 name: CI CD
 
 on:
+    push:
+        branches: [ master ]
+
     pull_request:
         branches: [ master ]
-        types: [ closed ]
 
 env:
     NODE_VERSION: 14.x
@@ -14,7 +16,7 @@ jobs:
         name: Test
         runs-on: [ self-hosted, linux ]
         steps:
-            - name: checkout master
+            - name: checkout
               uses: actions/checkout@v2
               with:
                   clean: false
@@ -32,7 +34,7 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
 
-            - name: install npm dependencies
+            - name: install dependencies
               run: npm i
 
             - name: test unit
@@ -44,40 +46,53 @@ jobs:
             - name: check coverage
               run: npm run test:coverage
 
-    build:
-        needs: test
-        if: github.event.action == 'closed' && github.event.pull_request.merged
-        name: Build
-        runs-on: [ self-hosted, linux ]
-        steps:
-            - name: checkout master
-              uses: actions/checkout@v2
-              with:
-                  clean: false
-
-            - name: cache node modules
-              uses: actions/cache@v1
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
-
-            - name: setup node.js and npm
-              uses: actions/setup-node@v2
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-
-            - name: install npm dependencies
-              run: npm i
-
-            - name: build
+            - name: build project
+              if: github.event.action == 'closed' && github.event.pull_request.merged
               run: npm run build
 
             - name: upload artifact
+              if: github.event.action == 'closed' && github.event.pull_request.merged
               uses: actions/upload-artifact@v2
               with:
                   name: ${{ github.event.repository.name }}
                   path: ${{ env.NPM_BUILD_ARTIFACT }}
                   if-no-files-found: error
                   retention-days: 1
+
+    # build:
+    #     needs: test
+    #     if: github.event.action == 'closed' && github.event.pull_request.merged
+    #     name: Build
+    #     runs-on: [ self-hosted, linux ]
+    #     steps:
+    #         - name: checkout master
+    #           uses: actions/checkout@v2
+    #           with:
+    #               clean: false
+
+    #         - name: cache node modules
+    #           uses: actions/cache@v1
+    #           with:
+    #               path: ~/.npm
+    #               key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #               restore-keys: |
+    #                   ${{ runner.os }}-node-
+
+    #         - name: setup node.js and npm
+    #           uses: actions/setup-node@v2
+    #           with:
+    #               node-version: ${{ env.NODE_VERSION }}
+
+    #         - name: install npm dependencies
+    #           run: npm i
+
+    #         - name: build
+    #           run: npm run build
+
+    #         - name: upload artifact
+    #           uses: actions/upload-artifact@v2
+    #           with:
+    #               name: ${{ github.event.repository.name }}
+    #               path: ${{ env.NPM_BUILD_ARTIFACT }}
+    #               if-no-files-found: error
+    #               retention-days: 1
