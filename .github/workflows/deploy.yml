@@ -1,4 +1,4 @@
-name: CI CD
+name: Testing and deployment workflow
 
 on:
     push:
@@ -6,6 +6,7 @@ on:
 
     pull_request:
         branches: [ master ]
+        types: [ closed ]
 
 env:
     NODE_VERSION: 14.x
@@ -13,7 +14,7 @@ env:
 
 jobs:
     test:
-        name: CI/CD
+        name: CI / CD
         runs-on: [ self-hosted, linux ]
         steps:
             - name: checkout
