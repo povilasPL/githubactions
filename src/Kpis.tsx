@@ -17,13 +17,13 @@ const Kpis = () => {
             Branding Kpis:
             {kpisByType?.branding?.map((kpi: string) => (
                 <div key={kpi}>
-                   <Kpi kpi={kpi} values={values} trackingFilters={trackingFilters} />
+                   <Kpi kpi={kpi} value={values?.[kpi]?.value} trackingFilter={trackingFilters?.[kpi]?.id} />
                 </div>
             ))}
             Performance Kpis:
             {kpisByType?.performance?.map((kpi: string) => (
                 <div key={kpi}>
-                    <Kpi kpi={kpi} values={values} trackingFilters={trackingFilters} />
+                    <Kpi kpi={kpi} value={values?.[kpi]?.value} trackingFilter={trackingFilters?.[kpi]?.id} />
                 </div>
             ))}
         </div>

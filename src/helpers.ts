@@ -8,12 +8,8 @@ type acc = {
 
 const brandingList = ['videoCompletionRate', 'viewabilityRate', 'ecpmReach', 'ecpmViewable'];
 
-const KPI_TYPES = {
-    rate: 'rate',
-    effectiveCost: 'effectiveCost'
-}
 
-const KPI_TYPES_MAP: any = {
+export const KPI_TYPES_MAP: any = {
     videoCompletionRate: 'rate',
     viewabilityRate: 'rate',
     ecmpReact: 'effectiveCost',
@@ -47,15 +43,10 @@ export const formatKpiData = (kpis: any) => {
             ...acc,
             [key]: {
                 type,
-                value: formatKpiValue(type, value)
+                value
             },
         }
     }, {});
-
-    function formatKpiValue(type: string, value: number) {
-        return type === KPI_TYPES.rate ? value *= 100 : value;
-    }
-
 
     const trackingFiltersState = reduce(kpis, (acc, value: any, key) => {
         const trackingFilter = value?.trackingFilter
@@ -87,7 +78,7 @@ export const mapKpiData = (kpis: any, values: any, trackingFilters: any) => {
             ...acc,
             [kpi]: {
                 type,
-                value: value && value > 0 ? value / 100 : 0, // still doesn't work correctly
+                value,
                 ...(shouldIncludeTrackingFilter && { trackingFilter })
             }
         }

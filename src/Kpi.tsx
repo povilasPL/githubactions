@@ -3,19 +3,20 @@ import React, { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash/debounce';
 
+import { KPI_TYPES_MAP } from './helpers';
 import { setKpiValue, setTrackingFilter } from './reducer';
 
 interface KpiProps {
     kpi: string
-    values: any
-    trackingFilters: any
+    value: any
+    trackingFilter: any
 }
 
-const Kpi: React.FC<KpiProps> = ({ kpi, values, trackingFilters }) => {
+const Kpi: React.FC<KpiProps> = ({ kpi, value, trackingFilter }) => {
     const dispatch = useDispatch();
 
-    const [val, setValue] = useState(values?.[kpi]?.value);
-    const [trackingFilter, setTfValue] = useState(trackingFilters?.[kpi]?.id);
+    const [val, setValue] = useState(KPI_TYPES_MAP[kpi] === 'rate' ? value * 100 : value);
+    const [tf, setTfValue] = useState(trackingFilter);
 
     const updateState = useMemo(
         () =>
@@ -28,7 +29,7 @@ const Kpi: React.FC<KpiProps> = ({ kpi, values, trackingFilters }) => {
       const handleKpiValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value);
     
-        updateState(setKpiValue, { kpi, value: e.target.value });
+        updateState(setKpiValue, { kpi, value: Number(e.target.value) / 100 });
       };
 
 
@@ -47,7 +48,7 @@ const Kpi: React.FC<KpiProps> = ({ kpi, values, trackingFilters }) => {
             { shpouldIncludeTrackingFilter && 
                 <>
                     <label htmlFor="trackingFilter">Tracking filter: </label>
-                    <input value={trackingFilter} onChange={handleTrackingFilterChange} />
+                    <input value={tf} onChange={handleTrackingFilterChange} />
                 </>
                 
             }
