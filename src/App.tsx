@@ -1,22 +1,16 @@
 import React, { useEffect } from "react";
 
-import { useDispatch } from "react-redux";
-import map from 'lodash/map';
-import reduce from 'lodash/reduce';
+import { useDispatch, useSelector } from "react-redux";
 
-import { setKpiData } from "./reducer";
+import { setKpiData, getKpiData } from "./reducer";
+import { formatKpiData } from './helpers';
 import Kpis from "./Kpis";
+import KpisSelection from "./KpisSelection";
 
 const App: React.FC = () => {
     const dispatch = useDispatch();
 
-    const brandingList = ['videoCompletionRate', 'viewabilityRate', 'ecpmReach', 'ecpmViewable'];
-    const performanceLits = ['ctr', 'ecpc', 'ecpa', 'roas'];
-
-    const KPI_TYPES = {
-        rate: 'rate',
-        effectiveCost: 'effectiveCost'
-    }
+    const { kpis: { byAlphabeth } } = useSelector(getKpiData);
 
     useEffect(() => {
         // kpis be response / kpis submit callback result
@@ -41,59 +35,16 @@ const App: React.FC = () => {
             },
         }
 
-        type acc = {
-            branding: string[]
-            performance: string[]
-        }
-
-        const kpisByType = reduce(kpis, (acc:acc, _, kpi) => {
-            brandingList.includes(kpi) ? acc.branding.push(kpi) : acc.performance.push(kpi);
-
-            return acc;
-        }, {
-            branding: [],
-            performance:[]
-        })
-
-        const kpisByPriority = map(kpis, (_, kpi) => kpi);
-
-        const kpisState = {
-            byType: kpisByType,
-            byPriority: kpisByPriority,
-        }
-
-        const valuesState = reduce(kpis, (acc, { value, type }, key) => {
-            return {
-                ...acc,
-                [key]: {
-                    type,
-                    value: formatKpiValue(type, value)
-                },
-            }
-        }, {});
-
-        function formatKpiValue(type: string, value: number) {
-            return type === KPI_TYPES.rate ? value *= 100 : value;
-        }
-
-
-        const trackingFiltersState = reduce(kpis, (acc, value: any, key) => {
-            const trackingFilter = value?.trackingFilter
-                ? { [key]: { id: value?.trackingFilter } }
-                : null
-
-            return {
-                ...acc,
-                ...trackingFilter,
-            }
-        }, {})
-
+        const { kpisState, valuesState, trackingFiltersState } = formatKpiData(kpis);
 
         dispatch(setKpiData({ kpis: kpisState, values: valuesState, trackingFilters: trackingFiltersState }));
-    }, [dispatch, brandingList, performanceLits])
+    }, [dispatch])
 
     return (
-        <Kpis />
+        <>
+            <Kpis />
+            <KpisSelection selectedKpis={byAlphabeth} />
+        </>
     )
 };
 

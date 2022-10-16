@@ -2,25 +2,26 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { getKpiData, kpisForBackEnd } from './reducer';
+import { getKpiData } from './reducer';
 import Kpi from './Kpi';
 
 const Kpis = () => {
-    const { kpis: { byType }, values, trackingFilters } = useSelector(getKpiData);
-    const saveVariables = useSelector(kpisForBackEnd);
+    const kpiData = useSelector(getKpiData);
 
-    console.log(saveVariables);
+    const kpisByType = kpiData.kpis.byType;
+    const values = kpiData.values;
+    const trackingFilters = kpiData.trackingFilters;
 
     return (
         <div>
             Branding Kpis:
-            {byType?.branding?.map((kpi: string) => (
+            {kpisByType?.branding?.map((kpi: string) => (
                 <div key={kpi}>
                    <Kpi kpi={kpi} values={values} trackingFilters={trackingFilters} />
                 </div>
             ))}
             Performance Kpis:
-            {byType?.performance?.map((kpi: string) => (
+            {kpisByType?.performance?.map((kpi: string) => (
                 <div key={kpi}>
                     <Kpi kpi={kpi} values={values} trackingFilters={trackingFilters} />
                 </div>

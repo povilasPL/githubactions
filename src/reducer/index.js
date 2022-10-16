@@ -8,8 +8,12 @@ const KPI_TYPES = {
 const initialState = {
     kpiData: {
         kpis: {
-            byType: {},
-            byPriority: []
+            byType: {
+                branding: [],
+                performance: []
+            },
+            byPriority: [],
+            byAlphabeth: [],
         },
         values: {},
         trackingFilters: {}
