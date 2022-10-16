@@ -14,9 +14,10 @@
         "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-        "no-console": 2,
+        "no-console": 0,
         "no-loops/no-loops": 2,
-        "react-hooks/exhaustive-deps": 1
+        "react-hooks/exhaustive-deps": 0,
+        "@typescript-eslint/no-explicit-any": 0
     },
     "settings": {
         "react": {
